@@ -1,6 +1,7 @@
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -10,11 +11,42 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation animation;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+
+    animation = ColorTween(
+      begin: Colors.blueGrey,
+      end: Colors.white,
+    ).animate(controller);
+
+    controller.forward();
+
+    animation.addListener(() {
+      setState(() {});
+      print(animation.value);
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: animation.value,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -30,9 +62,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Image.asset('images/logo.png'),
                   ),
                 ),
-                Text(
-                  'Flash Chat',
-                  style: TextStyle(fontSize: 45.0, fontWeight: FontWeight.w900),
+                DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 45.0,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black,
+                  ),
+                  child: AnimatedTextKit(
+                    // pause: Duration(seconds: 3),
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        'Flash Chat',
+                        speed: Duration(milliseconds: 200),
+                      ),
+                    ],
+                    repeatForever: true,
+                  ),
                 ),
               ],
             ),
