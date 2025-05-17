@@ -34,7 +34,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
     animation.addListener(() {
       setState(() {});
-      print(animation.value);
     });
   }
 
@@ -58,7 +57,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               children: [
                 Hero(
                   tag: 'logo',
-                  child: Container(
+                  child: SizedBox(
                     height: 60.0,
                     child: Image.asset('images/logo.png'),
                   ),
